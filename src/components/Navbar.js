@@ -6,9 +6,12 @@ const Navbar = () => {
   let location = useLocation();
   let navigate = useNavigate()
 
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    navigate("/")
+  const handleLogout = async () => {
+    const response = await fetch('http://localhost:5000/api/auth/logout',{
+      method:'POST',
+      credentials:'include'
+    })
+    navigate('/')
   }
   return (
     <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -27,7 +30,7 @@ const Navbar = () => {
         </li>
         
       </ul>
-      {!localStorage.getItem('token')?<form className="d-flex" role="search">
+      {!document.cookie.includes('token')?<form className="d-flex" role="search">
       <Link className="btn btn-primary mx-2" to="/" role="button">Login</Link>
       </form>:<button className='btn btn-primary' onClick={handleLogout}>Logout</button>}
     </div>

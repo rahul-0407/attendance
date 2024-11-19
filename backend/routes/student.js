@@ -71,64 +71,55 @@ router.post("/login", async (req, res) => {
     let success = false;
     const { email, password } = req.body;
 
-    let student = await Student.findOne({ email });
-    let teacher = await Teacher.findOne({ email });
+    let user = await Student.findOne({ email }) || Teacher.findOne({ email });
+    let userType = user instanceof Student ? 'student' : 'teacher';
 
-    if (!student && !teacher) {
+    if (!user) {
       return res.status(400).json({
         success,
         message: "Try to login with correct credentials student and teacher",
       });
     }
 
-    if (student) {
-      const isMatch = await bcrypt.compare(password, student.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-      if (!isMatch) {
-        return res.status(400).json({
-          message: "Try to login with correct..... credentials",
-          success: false,
-        });
-      }
-
-      const data = {
-        user: {
-          id: student.id,
-          userType: student.userType,
-        },
-      };
-
-      const authToken = jwt.sign(data, JWT_SECRET);
-      success = true;
-      res.json({ success, authToken, userType:student.userType });
-    } 
-
-
-    else {
-      const isMatch = await bcrypt.compare(password, teacher.password);
-
-      if (!isMatch) {
-        return res.status(400).json({
-          message: "Try to login with correct..... p",
-          success: false,
-        });
-      }
-
-      const data = {
-        user: {
-          id: teacher.id,
-          userType: teacher.userType,
-        },
-      };
-
-      const authToken = jwt.sign(data, JWT_SECRET);
-      success = true;
-      res.json({ success, authToken, userType:teacher.userType,subject:teacher.subject });
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Try to login with correct..... credentials",
+         success: false,
+      });
     }
+
+    const data = {
+      user: {
+        id: user.id,
+        userType:userType,
+      },
+    };
+
+
+    sendCookies(data,res,201)
+
+
+    res.json({
+      success:true,
+      userType:userType,
+      ...(userType = "teacher" && {subject:user.subject})
+    })
+
+    
   } catch (error) {
     console.log(error);
   }
 });
+
+router.post('logout',(res,res)=> {
+  req.clearCookie('token',{
+    httpOnly: true,
+    sameSite: 'Strict',
+  })
+  res.status(200).json({ message: 'Logged out successfully' });
+})
 
 router.post("/getuser", isAuthenticated, async (req, res) => {
   try {

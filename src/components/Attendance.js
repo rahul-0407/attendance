@@ -52,7 +52,9 @@ const Attendance = () => {
           <tr>
             <th>#</th>
             <th>Suject</th>
-            <th>Status</th>
+            {Array.from({length: 30}, (_,i) => (
+              <th key={i + 1}>{i + 1}</th>
+            ))}
           </tr>
         </thead>
         <tbody>

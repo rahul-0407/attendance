@@ -8,15 +8,15 @@ const attendanceSchema = new mongoose.Schema({
     },
     Math:{
         type:String,
-        default:"not mention"
+        default:"N"
     },
     Html_and_CSS:{
         type:String,
-        default:"not mention"
+        default:"N"
     },
     GTP:{
         type:String,
-        default:"not mention"
+        default:"N"
     },
     HVE:{
         type:String,
@@ -24,23 +24,23 @@ const attendanceSchema = new mongoose.Schema({
     },
     EVS:{
         type:String,
-        default:"not mention"
+        default:"N"
     },
     c_programminig:{
         type:String,
-        default:"not mention"
+        default:"N"
     },
     Web_Dev:{
         type:String,
-        default:"not mention"
+        default:"N"
     },
     c_programminig_lab:{
         type:String,
-        default:"not mention"
+        default:"N"
     },
     science:{
         type:String,
-        default:"not mention"
+        default:"N"
     },
     createdAt: {
         type: Date,

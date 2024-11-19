@@ -56,30 +56,37 @@ const AttendanceState = (props) => {
   }
 
   const getAttendance = async () => {
-    
-    const response = await fetch(`http://localhost:5000/api/auth/attendance`, {
-      method: "GET", 
-      headers: {
-        "Content-Type": "application/json",
-        "authToken": localStorage.getItem('token')
-      },
-    });
+    try {
+      console.log("getAttendance")
+      const response = await fetch('http://localhost:5000/api/auth/attendance', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Ensure cookies are included
+      });
 
-    const json = await response.json();
-    
-    console.log(json)
-    setAttendance(json)
-    console.log(attendance)
-  }
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const json = await response.json();
+      setAttendance(json);
+    } catch (error) {
+      console.error('Error fetching attendance:', error);
+      showAlert('danger', 'Error fetching attendance');
+    }
+  };
+  
 
   const submitCode = async (otp) => {
-    console.log("fetching....")
 
     const response = await fetch(`http://localhost:5000/api/auth/submitCode`, {
       method: "PUT", 
+      credentials:"include",
       headers: {
         "Content-Type": "application/json",
-        "authToken": localStorage.getItem('token')
       },
       body: JSON.stringify({code:otp}),
     });

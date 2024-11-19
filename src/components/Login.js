@@ -8,28 +8,47 @@ const Login = () => {
 
 
   const [credentials, setCredentials] = useState({email:"",password:""});
+  const [loading, setLoading] = useState(false); // Add loading state for better UX
+  const [error, setError] = useState(null); // Add error state for displaying errors
   let navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(`http://localhost:5000/api/auth/login`, {
+
+    if (!credentials.email || !credentials.password) {
+      showAlert("danger", "Please enter both email and password");
+      return;
+    }
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      
+      const response = await fetch(`http://localhost:5000/api/auth/login`, {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({email:credentials.email,password:credentials.password}),
+      credentials:"include",
     });
 
-    const {userType,authToken,success,subject} = await response.json();
+    const data = await response.json();
 
-    if(subject !== undefined && subject !== null && subject !== ""){
-      setSubject(subject);
-      console.log(subject)
+    if (!response.ok) {
+      throw new Error(data.message || "Something went wrong");
+    }
+
+    const { userType, authToken, success, subject } = data;
+
+    if(subject){
+      setSubject(subject)
     }
 
 
     if(success){
-      localStorage.setItem('token',authToken);
+      // localStorage.setItem('token',authToken);
       
       if(userType==="teacher"){
         navigate("/code")
@@ -45,6 +64,17 @@ const Login = () => {
     }
     else{
       showAlert("danger","Invalid Credentials")
+    }
+
+
+    } catch (error) {
+      
+      console.log("Login Error:", error)
+      setError(error.message);
+      showAlert("danger","An error occurred. Please try again.")
+
+    }finally{
+      setLoading(false)
     }
   }
 

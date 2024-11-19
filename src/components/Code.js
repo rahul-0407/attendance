@@ -7,10 +7,11 @@ const Code = () => {
 
   let navigate = useNavigate();
 
-  const [code, setCode] = useState('');
-  const [timer, setTimer] = useState(30);
-  const [intervalId, setIntervalId] = useState(null);
-  const [genC, setGenC] = useState("Generate");
+  const [code,setCode] = useState("")
+  const [timer, setTimer] = useState(30)
+  const [intervalId, setIntervalId] = useState(null)
+  const [genC, setGenC] = useState("Generate")
+  const [isDisabled, setIsDisabled] = useState(false); 
 
 
 
@@ -43,27 +44,28 @@ const Code = () => {
       newCode = newCode + Math.floor(Math.random(elements) * 10);
     }
 
-    setCode(newCode);
-    setTimer(30);
+    setCode(newCode)
+    setTimer(30)
+    setGenC("Regenrate")
+    setIsDisabled(true);
 
-    if (intervalId) {
-      clearInterval(intervalId);
+    if(intervalId){
+      clearInterval(intervalId)
     }
 
-
     const id = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer === 0) {
-          setGenC("Regenerate")
+      setTimer((prevTimer)=>{
+        if(prevTimer===0){
+          setGenC("Regenrate")
           setCode('')
-          clearInterval(id);
-          
+          setIsDisabled(false);
+          clearInterval(id)
         }
-        return prevTimer > 0 ? prevTimer - 1 : 0; 
-      });
+        return prevTimer > 0 ? prevTimer - 1 : 0;
+      })
     }, 1000);
 
-    setIntervalId(id);
+    setIntervalId(id)
 
     generateCode(newCode);
   }
@@ -85,7 +87,7 @@ const Code = () => {
               <p className="text-center">Timer: {timer} seconds</p>
             </div>
           <div className="d-grid">
-            <button type="submit" className="btn btn-primary" onClick={generate}>{genC}</button>
+            <button type="submit" className="btn btn-primary" disabled={isDisabled} onClick={generate}>{genC}</button>
           </div>
         </form>
       </div>
