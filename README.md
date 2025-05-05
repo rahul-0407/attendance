@@ -1,3 +1,34 @@
+# Attendance OTP System
+
+This project implements an attendance management system using OTPs (One-Time Passwords) where teachers generate a code, and students enter the code to validate and mark their attendance. The OTP expires after 10 seconds to ensure secure and time-sensitive validation.
+
+## Features
+- **Teacher Role:** Teachers can generate OTPs for each class.
+- **Student Role:** Students can enter the OTP to mark their attendance.
+- **OTP Expiry:** The OTP expires after 10 seconds to ensure quick validation.
+- **Security:** Time-sensitive OTP ensures that attendance cannot be manipulated.
+
+## Technologies Used
+- Frontend: HTML, CSS, JavaScript (Vanilla or React)
+- Backend: Node.js (Express or other frameworks)
+- Database: MongoDB (for storing attendance data and OTPs)
+- OTP Generation: `otp-generator` or any other suitable library
+- Expiry Handling: Set timeout or expiration logic
+- Authentication: Optional (can be integrated with JWT for secure user access)
+
+## Installation
+
+### Prerequisites
+1. Node.js installed on your machine.
+2. A MongoDB instance (either local or hosted).
+3. OTP generation library (e.g., `otp-generator`).
+
+### Steps
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/attendance-otp-system.git
+
+   
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
